@@ -11,19 +11,23 @@ pd.read_sql("""SELECT * FROM sqlite_master""", conn)
 
 # STEP 1
 # Replace None with your code
-df_boston = None
+df_boston = pd.read_sql("""SELECT employees.firstName, employees.lastName, employees.jobTitle FROM employees JOIN offices ON employees.officeCode = offices.officeCode WHERE offices.city = 'Boston'""", conn)
+#print(df_boston)
 
 # STEP 2
 # Replace None with your code
-df_zero_emp = None
+df_zero_emp = pd.read_sql("""SELECT officeCode, COUNT(*) AS number_of_employees FROM employees GROUP BY officeCode HAVING number_of_employees IS 0""", conn)
+#print(df_zero_emp)
 
 # STEP 3
 # Replace None with your code
-df_employee = None
+df_employee = pd.read_sql("""SELECT e.firstName, e.lastName, o.city, o.state FROM employees AS e JOIN offices as o ON e.officeCode = o.officeCode ORDER BY e.firstName ASC, e.lastName ASC""", conn)
+#print(df_employee)
 
 # STEP 4
 # Replace None with your code
-df_contacts = None
+df_contacts = pd.read_sql("""SELECT c.contactFirstName, c.contactLastName, c.phone, c.salesRepEmployeeNumber FROM customers AS c LEFT JOIN orders AS o ON o.customerNumber = c.customerNumber WHERE o.orderNumber IS NULL ORDER BY c.contactLastName""" , conn)
+#print(df_contacts)
 
 # STEP 5
 # Replace None with your code
