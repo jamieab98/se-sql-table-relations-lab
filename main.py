@@ -31,7 +31,10 @@ df_contacts = pd.read_sql("""SELECT c.contactFirstName, c.contactLastName, c.pho
 
 # STEP 5
 # Replace None with your code
-df_payment = None
+df_payment = pd.read_sql("""SELECT c.contactFirstName, c.contactLastName, p.amount, p.paymentDate FROM payments AS p JOIN customers as c ON p.customerNumber = c.customerNumber ORDER BY p.amount DESC""", conn)
+df_payment['amount'] = pd.to_numeric(df_payment['amount'])
+df_payment = df_payment.sort_values('amount', ascending=False)
+#print(df_payment)
 
 # STEP 6
 # Replace None with your code
