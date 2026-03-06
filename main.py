@@ -58,7 +58,7 @@ df_customers = pd.read_sql("""SELECT o.officeCode, SUM(q.num_of_customers) AS n_
 
 # STEP 10
 # Replace None with your code
-df_under_20 = pd.read_sql("""SELECT od.productCode, o.orderNumber, o.customerNumber FROM orderdetails AS od JOIN orders AS o ON o.orderNumber = od.orderNumber GROUP BY od.productCode HAVING COUNT(DISTINCT o.customerNumber) < 20""", conn)
+df_under_20 = pd.read_sql("""SELECT q.employeeNumber, q.firstName, q.lastName, o.city, o.officeCode FROM (SELECT e.employeeNumber, e.firstName, e.lastName, e.officeCode FROM (SELECT q.productCode, q.orderNumber, q.customerNumber, c.salesRepEmployeeNumber FROM (SELECT q.productCode, q.orderNumber, o.customerNumber FROM (SELECT q.productCode, od.orderNumber FROM (SELECT od.productCode, COUNT(DISTINCT o.customerNumber) AS num_of_customers FROM orderdetails AS od JOIN orders AS o ON o.orderNumber = od.orderNumber GROUP BY od.productCode HAVING COUNT(DISTINCT o.customerNumber) < 20) AS q RIGHT JOIN orderdetails AS od ON od.productCode = q.productCode WHERE q.productCode IS NOT NULL) AS q JOIN orders AS o ON o.orderNumber = q.orderNumber) AS q JOIN customers AS c ON c.customerNumber = q.customerNumber) AS q JOIN employees AS e ON e.employeeNumber = q.salesRepEmployeeNumber) AS q JOIN offices AS o ON q.officeCode = o.officeCode GROUP BY q.employeeNumber ORDER BY q.lastName""", conn)
 print(df_under_20)
 
 conn.close()
